@@ -1,5 +1,6 @@
 package com.example.android_course
 
+import com.example.android_course.util.User
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import retrofit2.http.GET

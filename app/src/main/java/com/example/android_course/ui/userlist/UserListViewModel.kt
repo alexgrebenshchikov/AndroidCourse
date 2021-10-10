@@ -1,7 +1,11 @@
-package com.example.android_course
+package com.example.android_course.ui.userlist
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android_course.Api
+import com.example.android_course.ui.base.BaseViewModel
+import com.example.android_course.util.User
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
@@ -13,8 +17,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 
-class MainViewModel : ViewModel() {
-
+class UserListViewModel : BaseViewModel() {
+    companion object {
+        val log_tag = "MainActivityLogTag"
+    }
     private val _viewState = MutableStateFlow<ViewState>(ViewState.Loading)
     val viewState: StateFlow<ViewState> = _viewState
 
@@ -33,6 +39,7 @@ class MainViewModel : ViewModel() {
     }
 
     private suspend fun loadUsers() : List<User> {
+        Log.d(log_tag, "loadusers")
         return provideApi().getUsers().data
     }
 
