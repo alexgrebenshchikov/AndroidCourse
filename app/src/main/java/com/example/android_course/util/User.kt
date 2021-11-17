@@ -1,4 +1,4 @@
-package com.example.android_course
+package com.example.android_course.util
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/guest_nav_graph"
+    app:startDestination="@id/onBoardingFragment">
+
+    <fragment
+        android:id="@+id/onBoardingFragment"
+        android:name="com.example.android_course.ui.onboarding.OnBoardingFragment"
+        android:label="OnBoardingFragment" >
+        <action
+            android:id="@+id/action_onBoardingFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_onBoardingFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.example.android_course.ui.signup.SignUpFragment"
+        android:label="SignUpFragment" >
+        <action
+            android:id="@+id/action_signUpFragment_to_emailConfirmationFragment"
+            app:destination="@id/emailConfirmationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/emailConfirmationFragment"
+        android:name="com.example.android_course.ui.email_confirmation.EmailConfirmationFragment"
+        android:label="EmailConfirmationFragment" >
+        <action
+            android:id="@+id/action_emailConfirmationFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment2"
+        android:name="com.example.android_course.ui.main.MainFragment"
+        android:label="MainFragment" />
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.example.android_course.ui.signin.SignInFragment"
+        android:label="SignInFragment" >
+        <action
+            android:id="@+id/action_signInFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
+    </fragment>
+</navigation>

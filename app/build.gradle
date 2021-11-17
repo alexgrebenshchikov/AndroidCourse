@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -16,6 +17,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "Boolean", "USE_MOCK_BACKEND_API", 'false'
+        // TODO: Прописать адрес нашего сервера.
+        buildConfigField "String", "BACKEND_API_URL", '""'
     }
 
     buildTypes {
@@ -35,6 +39,36 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    flavorDimensions "deployment-environment"
+    productFlavors {
+        mock {
+            dimension "deployment-environment"
+            applicationIdSuffix ".mock"
+            versionNameSuffix ".mock"
+            buildConfigField "Boolean", "USE_MOCK_BACKEND_API", 'true'
+        }
+        dev {
+            dimension "deployment-environment"
+            applicationIdSuffix ".dev"
+            versionNameSuffix ".dev"
+            buildConfigField "String", "BACKEND_API_URL", '""'
+        }
+        stage {
+            dimension "deployment-environment"
+            applicationIdSuffix ".stage"
+            versionNameSuffix ".stage"
+            buildConfigField "String", "BACKEND_API_URL", '""'
+        }
+        prod {
+            dimension "deployment-environment"
+            versionNameSuffix ".prod"
+            // Despite the default config, all the variables are specified explicitly here,
+            // because this product flavor is the most sensitive to errors.
+            buildConfigField "Boolean", "USE_MOCK_BACKEND_API", 'false'
+            buildConfigField "String", "BACKEND_API_URL", '""'
+        }
     }
 }
 
@@ -75,7 +109,46 @@ dependencies {
     // View binding helper.
     implementation "com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.4.4"
 
-}
+    // Video player
+    def exoPlayerVersion = "2.15.0"
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoPlayerVersion"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$exoPlayerVersion"
 
+    def nav_version = "2.3.5"
+
+    // Java language implementation
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+
+    // Kotlin
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    // Feature module Support
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+
+    // Testing Navigation
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+
+    // Jetpack Compose Integration
+    implementation "androidx.navigation:navigation-compose:2.4.0-beta01"
+
+    // RecyclerView adapter delegates.
+// https://github.com/sockeqwe/AdapterDelegates
+    def adapterDelegatesVersion = '4.3.0'
+    implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl:$adapterDelegatesVersion"
+    implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:$adapterDelegatesVersion"
+
+    // Logger.
+    implementation "com.jakewharton.timber:timber:4.7.1"
+
+    // https://github.com/haroldadmin/NetworkResponseAdapter.
+    implementation "com.github.haroldadmin:NetworkResponseAdapter:4.2.2"
+
+    def hiltVersion = "2.38.1"
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+    implementation "androidx.hilt:hilt-navigation-fragment:1.0.0"
+}
 
 
