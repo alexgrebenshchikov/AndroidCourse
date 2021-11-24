@@ -14,7 +14,7 @@ import com.example.android_course.databinding.FragmentSignInBinding
 import com.example.android_course.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
-//@AndroidEntryPoint
+@AndroidEntryPoint
 class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
     private val viewBinding by viewBinding(FragmentSignInBinding::bind)
     private val viewModel: SignInViewModel by viewModels()
@@ -34,7 +34,7 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
                 email = viewBinding.emailEditText.text?.toString() ?: "",
                 password = viewBinding.passwordEditText.text?.toString() ?: ""
             )
-            //it.findNavController().navigate(R.id.action_signInFragment_to_mainFragment2)
+            it.findNavController().navigate(R.id.action_signInFragment_to_mainFragment2)
         }
         subscribeToFormFields()
     }

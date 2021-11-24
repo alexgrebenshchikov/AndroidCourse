@@ -1,6 +1,8 @@
 package com.example.android_course.repository
 
-import com.example.android_course.Api
+import com.blelocking.di.AppCoroutineScope
+import com.blelocking.di.IoCoroutineDispatcher
+import com.example.android_course.data.network.Api
 import com.example.android_course.data.network.request.CreateProfileRequest
 import com.example.android_course.data.network.request.RefreshAuthTokensRequest
 import com.example.android_course.data.network.request.SignInWithEmailRequest
@@ -14,6 +16,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
+import dagger.Lazy
 
 /*object AuthRepository {
     private val _isAuthorizedFlow = MutableStateFlow(false)
@@ -44,11 +47,12 @@ import javax.inject.Inject
 }*/
 
 class AuthRepository @Inject constructor(
-    private val api: Api,
+    private val apiLazy: Lazy<Api>,
     private val localKeyValueStorage: LocalKeyValueStorage,
-    externalCoroutineScope: CoroutineScope,
-    private val ioDispatcher: CoroutineDispatcher
-) {
+    @AppCoroutineScope externalCoroutineScope: CoroutineScope,
+    @IoCoroutineDispatcher private val ioDispatcher: CoroutineDispatcher
+){
+    private val api by lazy { apiLazy.get() }
 
     private val authTokensFlow: Deferred<MutableStateFlow<AuthTokens?>> =
         externalCoroutineScope.async(context = ioDispatcher, start = CoroutineStart.LAZY) {

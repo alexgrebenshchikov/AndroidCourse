@@ -31,7 +31,7 @@ import com.example.android_course.util.getSpannedString
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
-
+import timber.log.Timber
 
 
 class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
@@ -60,6 +60,7 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
             //it.findNavController().navigate(R.id.action_signUpFragment_to_emailConfirmationFragment)
         }
         viewBinding.termsAndConditionsCheckBox.setClubRulesText {
+            Timber.d("checkbox")
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://policies.google.com/terms")))
         }
 

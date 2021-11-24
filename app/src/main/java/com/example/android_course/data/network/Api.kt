@@ -1,4 +1,4 @@
-package com.example.android_course
+package com.example.android_course.data.network
 
 import com.example.android_course.data.network.request.CreateProfileRequest
 import com.example.android_course.data.network.request.RefreshAuthTokensRequest

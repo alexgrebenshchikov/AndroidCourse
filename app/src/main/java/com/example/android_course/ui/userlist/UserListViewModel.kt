@@ -3,7 +3,7 @@ package com.example.android_course.ui.userlist
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android_course.Api
+import com.example.android_course.data.network.Api
 import com.example.android_course.ui.base.BaseViewModel
 import com.example.android_course.util.User
 import com.squareup.moshi.Moshi

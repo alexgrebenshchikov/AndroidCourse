@@ -26,7 +26,7 @@ class SignInViewModel @Inject constructor(
     }
 
     fun signIn(email: String, password: String) {
-        /*viewModelScope.launch {
+        viewModelScope.launch {
             _signInActionStateFlow.emit(SignInActionState.Loading)
             try {
                 when (val response = authInteractor.signInWithEmail(email, password)) {
@@ -47,7 +47,7 @@ class SignInViewModel @Inject constructor(
                 Timber.e(error)
                 _signInActionStateFlow.emit(SignInActionState.UnknownError(NetworkResponse.UnknownError(error)))
             }
-        }*/
+        }
     }
 
     sealed class SignInActionState {
