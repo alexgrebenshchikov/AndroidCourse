@@ -36,6 +36,7 @@ class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding){
         viewBinding.signInButton.setOnClickListener {
             it.findNavController().navigate(R.id.action_onBoardingFragment_to_signInFragment)
         }
+
     }
 
     override fun onResume() {

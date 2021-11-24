@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.android_course.R
 import com.example.android_course.ui.base.BaseFragment
@@ -37,6 +38,7 @@ import android.text.Spanned
 import android.text.SpannableString
 
 import android.R.string.no
+
 
 
 
@@ -224,6 +226,7 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
                     }
                 }
             )*/
+
     }
 
 }

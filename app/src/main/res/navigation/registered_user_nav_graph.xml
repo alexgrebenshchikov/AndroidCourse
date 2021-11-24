@@ -8,4 +8,5 @@
         android:id="@+id/mainFragment"
         android:name="com.example.android_course.ui.main.MainFragment"
         android:label="MainFragment" />
+
 </navigation>

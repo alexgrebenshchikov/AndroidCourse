@@ -13,6 +13,7 @@
         android:layout_height="match_parent">
 
 
+
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/playerView"
         android:layout_width="match_parent"
@@ -38,6 +39,7 @@
     <ImageButton
         android:id="@+id/soundButton"
         tools:ignore="SpeakableTextPresentCheck"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -59,6 +61,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/onboardingTextTabLayout"
         tools:ignore="SpeakableTextPresentCheck"
+
         android:layout_width="match_parent"
         android:layout_height="@dimen/onboarding_dot_size"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,3 +106,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
+
