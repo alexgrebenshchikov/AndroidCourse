@@ -16,9 +16,8 @@
     <string name="sign_up_nickname_text_layout_hint">nickname</string>
     <string name="sign_up_under_nickname_text">User Name</string>
     <string name="sign_up_under_email_text">Email</string>
-    <string name="sign_up_terms_and_conditions_template">Terms and Conditions</string>
+    <string name="sign_up_terms_and_conditions_template">I agree to the terms &amp; conditions </string>
     <string name="sign_up_sign_up_button_text">Sign up</string>
-    <string name="sign_up_club_rules">300 bucks 300 bucks 300 bucks 300 bucks 300 bucks 300 bucks
-    300 bucks 300 bucks 300 bucks 300 bucks</string>
+    <string name="sign_up_club_rules">правила клуба</string>
     <string name="email_confirmation_header">Enter verification code</string>
 </resources>

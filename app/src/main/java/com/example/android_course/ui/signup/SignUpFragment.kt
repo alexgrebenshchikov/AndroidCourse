@@ -32,6 +32,14 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
+import android.text.Spanned
+
+import android.text.SpannableString
+
+import android.R.string.no
+
+
+
 
 
 class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
@@ -193,7 +201,7 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
 
         // Turn on ClickableSpan.
         movementMethod = LinkMovementMethod.getInstance()
-        Log.d("setrules", "setclubrules run")
+        Timber.d("set rules")
         val clubRulesClickSpan =
             object : ClickableSpan() {
                 override fun onClick(widget: View) = clubRulesClickListener()
@@ -204,15 +212,18 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
                 }
             }
 
-        text =
-            resources.getSpannedString(
+        val spanString = SpannableString(getString(R.string.sign_up_terms_and_conditions_template))
+        spanString.setSpan(clubRulesClickSpan, 10, 33, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        text = spanString
+            /*resources.getSpannedString(
                 R.string.sign_up_terms_and_conditions_template,
                 buildSpannedString {
                     inSpans(clubRulesClickSpan) {
                         append(resources.getSpannedString(R.string.sign_up_club_rules))
                     }
                 }
-            )
+            )*/
     }
 
 }
