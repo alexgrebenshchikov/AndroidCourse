@@ -4,7 +4,7 @@ import android.os.Build
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.example.android_course.BuildConfig
 import com.example.android_course.data.network.Api
-//import com.example.android_course.data.network.MockApi
+import com.example.android_course.data.network.MockApi
 import com.example.android_course.data.network.interceptor.AuthorizationInterceptor
 import com.example.android_course.data.network.interceptor.AppAuthenticator
 import com.example.android_course.data.network.interceptor.UserAgentInterceptor
@@ -66,13 +66,8 @@ object NetworkModule {
     @Singleton
     fun provideApi(okHttpClient: OkHttpClient, moshi: Moshi): Api =
         if (BuildConfig.USE_MOCK_BACKEND_API) {
-            Retrofit.Builder()
-                .client(okHttpClient)
-                .baseUrl(BuildConfig.BACKEND_API_URL)
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
-                .addCallAdapterFactory(NetworkResponseAdapterFactory())
-                .build()
-                .create(Api::class.java)
+            Timber.d("mock")
+            MockApi()
         } else {
             Retrofit.Builder()
                 .client(okHttpClient)

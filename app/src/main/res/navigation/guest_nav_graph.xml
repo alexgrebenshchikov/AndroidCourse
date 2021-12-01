@@ -16,7 +16,6 @@
             app:destination="@id/signInFragment" />
     </fragment>
     <fragment
-
         android:id="@+id/signUpFragment"
         android:name="com.example.android_course.ui.signup.SignUpFragment"
         android:label="SignUpFragment" >
@@ -43,6 +42,5 @@
         <action
             android:id="@+id/action_signInFragment_to_mainFragment2"
             app:destination="@id/mainFragment2" />
-
     </fragment>
 </navigation>

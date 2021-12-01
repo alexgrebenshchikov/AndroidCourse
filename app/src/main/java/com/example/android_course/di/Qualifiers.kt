@@ -1,4 +1,4 @@
-package com.blelocking.di
+package com.example.android_course.di
 
 import javax.inject.Qualifier
 

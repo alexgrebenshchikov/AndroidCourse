@@ -3,16 +3,21 @@ package com.example.android_course.ui.signin
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.android_course.R
 import com.example.android_course.databinding.FragmentSignInBinding
 import com.example.android_course.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
@@ -21,11 +26,6 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*viewBinding.signInButton.setOnClickListener {
-            //it.findNavController().navigate(R.id.action_signInFragment_to_mainFragment2)
-            viewModel.signIn()
-        }*/
-
         viewBinding.backButton.setOnClickListener {
             onBackButtonPressed()
         }
@@ -34,9 +34,33 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
                 email = viewBinding.emailEditText.text?.toString() ?: "",
                 password = viewBinding.passwordEditText.text?.toString() ?: ""
             )
-            it.findNavController().navigate(R.id.action_signInFragment_to_mainFragment2)
         }
         subscribeToFormFields()
+        subscribeToAuthStatus()
+    }
+
+    private fun subscribeToAuthStatus() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.signInActionStateFlow().collect { vs ->
+                    when (vs) {
+                        is SignInViewModel.SignInActionState.Pending -> Timber.d("success")
+                        is SignInViewModel.SignInActionState.ServerError -> Timber.d(vs.e.code.toString())
+                        is SignInViewModel.SignInActionState.NetworkError -> Timber.d(vs.e.toString())
+                        is SignInViewModel.SignInActionState.UnknownError -> {
+                            Toast
+                                .makeText(
+                                    requireContext(),
+                                    R.string.common_general_error_text,
+                                    Toast.LENGTH_LONG
+                                )
+                                .show()
+                        }
+                        is SignInViewModel.SignInActionState.Loading -> Timber.d("Loading")
+                    }
+                }
+            }
+        }
     }
 
     private fun subscribeToFormFields() {
@@ -81,4 +105,3 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
     }
 
 }
-

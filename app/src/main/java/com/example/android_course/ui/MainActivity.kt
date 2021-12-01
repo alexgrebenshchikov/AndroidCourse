@@ -13,31 +13,24 @@ import com.example.android_course.R
 import com.example.android_course.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    //private val viewBinding by viewBinding(ActivityMainBinding::bind)
-
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         subscribeToAuthorizationStatus()
-
     }
 
     private fun subscribeToAuthorizationStatus() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                //viewModel.isAuthorizedFlow.collect {
-                    showSuitableNavigationFlow(false)
-               // }
-
+                viewModel.isAuthorizedFlow().collect {
+                    showSuitableNavigationFlow(it)
+                }
             }
         }
     }
