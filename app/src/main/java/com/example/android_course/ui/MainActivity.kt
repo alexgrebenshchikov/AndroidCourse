@@ -11,9 +11,13 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import com.example.android_course.R
 import com.example.android_course.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
+
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
+
+@AndroidEntryPoint
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -23,15 +27,17 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //subscribeToAuthorizationStatus()
+        subscribeToAuthorizationStatus()
+
     }
 
     private fun subscribeToAuthorizationStatus() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.isAuthorizedFlow.collect {
-                    showSuitableNavigationFlow(it)
-                }
+                //viewModel.isAuthorizedFlow.collect {
+                    showSuitableNavigationFlow(false)
+               // }
+
             }
         }
     }

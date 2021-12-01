@@ -1,7 +1,10 @@
 package com.example.android_course
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
+
+@HiltAndroidApp
 
 class App : Application() {
 

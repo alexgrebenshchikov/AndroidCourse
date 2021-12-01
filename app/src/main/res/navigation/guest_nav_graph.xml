@@ -11,12 +11,12 @@
         <action
             android:id="@+id/action_onBoardingFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_onBoardingFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
     </fragment>
     <fragment
-        android:id="@+id/userListFragment"
-        android:name="com.example.android_course.ui.userlist.UserListFragment"
-        android:label="UserListFragment" />
-    <fragment
+
         android:id="@+id/signUpFragment"
         android:name="com.example.android_course.ui.signup.SignUpFragment"
         android:label="SignUpFragment" >
@@ -29,7 +29,20 @@
         android:name="com.example.android_course.ui.email_confirmation.EmailConfirmationFragment"
         android:label="EmailConfirmationFragment" >
         <action
-            android:id="@+id/action_emailConfirmationFragment_to_userListFragment"
-            app:destination="@id/userListFragment" />
+            android:id="@+id/action_emailConfirmationFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment2"
+        android:name="com.example.android_course.ui.main.MainFragment"
+        android:label="MainFragment" />
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.example.android_course.ui.signin.SignInFragment"
+        android:label="SignInFragment" >
+        <action
+            android:id="@+id/action_signInFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
+
     </fragment>
 </navigation>

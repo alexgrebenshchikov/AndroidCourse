@@ -1,8 +1,24 @@
 <resources>
     <string name="app_name">Android_course</string>
-    <string name="onboarding_view_pager_text_1">Осень 2021 г., СПбГУ</string>
-    <string name="onboarding_view_pager_text_2">Мы изучаем разработку под Android</string>
-    <string name="onboarding_view_pager_text_3">Добро пожаловать в команду</string>
-    <string name="onboarding_sign_in_button_text">Войти</string>
-    <string name="onboarding_sign_up_button_text">Зарегистрироваться</string>
+    <string name="onboarding_view_pager_text_1">Fall 2021 г., SpbSU</string>
+    <string name="onboarding_view_pager_text_2">We study Android development</string>
+    <string name="onboarding_view_pager_text_3">Welcome to the club, buddy</string>
+    <string name="onboarding_sign_in_button_text">Sign in</string>
+    <string name="onboarding_sign_up_button_text">Sign up</string>
+    <string name="sign_in_sign_in_button_text">Sign in</string>
+    <string name="sign_in_email_text_layout_hint">enter email</string>
+    <string name="sign_in_password_text_layout_hint">enter password</string>
+    <string name="sign_in_back_alert_dialog_text">The entered data will be lost</string>
+    <string name="sign_in_back_alert_dialog_cancel_button_text">Cancel</string>
+    <string name="sign_in_back_alert_dialog_ok_button_text">OK</string>
+    <string name="sign_up_firstname_text_layout_hint">firstname</string>
+    <string name="sign_up_lastname_text_layout_hint">lastname</string>
+    <string name="sign_up_nickname_text_layout_hint">nickname</string>
+    <string name="sign_up_under_nickname_text">User Name</string>
+    <string name="sign_up_under_email_text">Email</string>
+    <string name="sign_up_terms_and_conditions_template">I agree to the terms &amp; conditions </string>
+    <string name="sign_up_sign_up_button_text">Sign up</string>
+    <string name="sign_up_club_rules">правила клуба</string>
+    <string name="email_confirmation_header">Enter verification code</string>
+
 </resources>

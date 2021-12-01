@@ -3,6 +3,8 @@ package com.example.android_course.ui.email_confirmation
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.android_course.R
 import com.example.android_course.databinding.FragmentEmailConfirmationBinding
@@ -13,10 +15,9 @@ class EmailConfirmationFragment : BaseFragment(R.layout.fragment_email_confirmat
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding.emailConfirmButton.setOnClickListener {
-            it.findNavController().navigate(R.id.action_emailConfirmationFragment_to_userListFragment)
+        viewBinding.backButton.setOnClickListener {
+            findNavController().popBackStack()
         }
-
     }
 
 }

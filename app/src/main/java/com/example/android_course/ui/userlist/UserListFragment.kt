@@ -7,6 +7,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.navGraphViewModels
+
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +21,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class UserListFragment : BaseFragment(R.layout.fragment_user_list) {
-    private val viewModel: UserListViewModel by viewModels()
+    private val viewModel: UserListViewModel by navGraphViewModels(R.id.main_fragment_nav_graph_xml)
+
     private val viewBinding by viewBinding(FragmentUserListBinding::bind)
 
 
