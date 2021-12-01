@@ -1,8 +1,12 @@
 package com.example.android_course.ui.onboarding
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.widget.Adapter
+import android.widget.ImageButton
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.android_course.R
@@ -16,12 +20,28 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
+import kotlin.properties.Delegates
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import timber.log.Timber
 
-class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding){
+
+class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding) {
     private val viewBinding by viewBinding(FragmentOnboardingBinding::bind)
-    private var player : ExoPlayer? = null
+    private var player: ExoPlayer? = null
+    private var soundEnabled: Boolean = true
+    private var currentVolume: Float? = null
+    private var page = 0
+    private var numPages  = 0
+    private val handler: Handler by lazy { Handler() }
+    private val viewPagerSwitchRoutine by lazy {
+        getVIewPagerSwitchRoutine()
+    }
+    private val delay: Long = 4000
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewBinding.soundButton.setBackgroundResource(R.drawable.ic_volume_up_white_24dp)
         player = SimpleExoPlayer.Builder(requireContext()).build().apply {
             addMediaItem(MediaItem.fromUri("asset:///videoplayback.mp4"))
             repeatMode = Player.REPEAT_MODE_ALL
@@ -30,27 +50,56 @@ class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding){
         viewBinding.playerView.player = player
         viewBinding.viewPager.setTextPages()
         viewBinding.viewPager.attachDots(viewBinding.onboardingTextTabLayout)
+        viewBinding.viewPager.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    handler.removeCallbacks(viewPagerSwitchRoutine)
+                    page = position
+                    handler.postDelayed(viewPagerSwitchRoutine, delay)
+                }
+            }
+        )
+
         viewBinding.signUpButton.setOnClickListener {
             it.findNavController().navigate(R.id.action_onBoardingFragment_to_signUpFragment)
         }
         viewBinding.signInButton.setOnClickListener {
             it.findNavController().navigate(R.id.action_onBoardingFragment_to_signInFragment)
         }
+        viewBinding.soundButton.setOnClickListener {
+            if (soundEnabled) {
+                currentVolume = player?.volume
+                player?.volume = 0f
+                soundEnabled = false
+                viewBinding.soundButton.setBackgroundResource(R.drawable.ic_volume_off_white_24dp)
+            } else {
+                player?.volume = currentVolume!!
+                soundEnabled = true
+                viewBinding.soundButton.setBackgroundResource(R.drawable.ic_volume_up_white_24dp)
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
         player?.play()
+        viewBinding.viewPager.setCurrentItem(0, false)
+        handler.postDelayed(viewPagerSwitchRoutine, delay)
+
     }
 
     override fun onPause() {
         super.onPause()
         player?.pause()
+        handler.removeCallbacks(viewPagerSwitchRoutine)
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
         player?.release()
+        handler.removeCallbacks(viewPagerSwitchRoutine)
     }
 
     private fun ViewPager2.setTextPages() {
@@ -62,6 +111,7 @@ class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding){
                         getString(R.string.onboarding_view_pager_text_2),
                         getString(R.string.onboarding_view_pager_text_3)
                     )
+                numPages = items.size
             }
     }
 
@@ -69,6 +119,15 @@ class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding){
         TabLayoutMediator(tabLayout, this) { _, _ -> }.attach()
     }
 
-
+    private fun getVIewPagerSwitchRoutine(): Runnable =
+        Runnable {
+            if (page == numPages - 1) {
+                page = 0;
+            } else {
+                page++;
+            }
+            viewBinding.viewPager.setCurrentItem(page, true);
+            //handler.postDelayed(this, delay);
+        }
 
 }

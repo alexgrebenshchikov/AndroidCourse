@@ -70,6 +70,12 @@ android {
             buildConfigField "String", "BACKEND_API_URL", '""'
         }
     }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "grebenshchikov-alexander-${variant.versionName}.apk"
+        }
+    }
 }
 
 kapt {
