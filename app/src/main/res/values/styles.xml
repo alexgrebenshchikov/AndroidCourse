@@ -11,7 +11,8 @@
         <item name="android:paddingTop">16dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body1</item>
-        <item name="android:textColor">@color/teal_200</item>
+        <item name="android:textColor">@color/lazure</item>
     </style>
+
 
 </resources>

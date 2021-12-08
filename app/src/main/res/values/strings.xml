@@ -11,9 +11,9 @@
     <string name="sign_in_back_alert_dialog_text">The entered data will be lost</string>
     <string name="sign_in_back_alert_dialog_cancel_button_text">Cancel</string>
     <string name="sign_in_back_alert_dialog_ok_button_text">OK</string>
-    <string name="sign_up_firstname_text_layout_hint">firstname</string>
-    <string name="sign_up_lastname_text_layout_hint">lastname</string>
-    <string name="sign_up_nickname_text_layout_hint">nickname</string>
+    <string name="sign_up_firstname_text_layout_hint">enter firstname</string>
+    <string name="sign_up_lastname_text_layout_hint">enter lastname</string>
+    <string name="sign_up_nickname_text_layout_hint">enter nickname</string>
     <string name="sign_up_under_nickname_text">User Name</string>
     <string name="sign_up_under_email_text">Email</string>
     <string name="sign_up_terms_and_conditions_template">I agree to the terms &amp; conditions </string>
@@ -22,4 +22,6 @@
     <string name="email_confirmation_header">Enter verification code</string>
     <string name="profile_logout_button_text">Logout</string>
     <string name="common_general_error_text">Something went wrong!</string>
+    <string name="submit_code">Submit code</string>
+    <string name="underPasswordText">Password</string>
 </resources>

@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginBottom="8dp"
-            android:backgroundTint="#FF9800"
+            android:backgroundTint="@color/sunshine"
 
             android:text="@string/onboarding_sign_in_button_text"
 
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginBottom="24dp"
-            android:backgroundTint="#03F4F4"
+            android:backgroundTint="@color/lazure"
             android:text="@string/onboarding_sign_up_button_text"
             app:layout_constraintBottom_toBottomOf="parent"
 
