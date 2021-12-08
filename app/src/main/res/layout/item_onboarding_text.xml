@@ -6,6 +6,5 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-
     android:textColor="#000000"
     tools:text="Test text" />

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.android_course.R
 import com.example.android_course.databinding.FragmentEmailConfirmationBinding
@@ -19,5 +18,4 @@ class EmailConfirmationFragment : BaseFragment(R.layout.fragment_email_confirmat
             findNavController().popBackStack()
         }
     }
-
 }

@@ -22,6 +22,6 @@
         android:label="BookmarksFragment" />
     <fragment
         android:id="@+id/personFragment"
-        android:name="com.example.android_course.ui.person.PersonFragment"
+        android:name="com.example.android_course.ui.profile.ProfileFragment"
         android:label="PersonFragment" />
 </navigation>

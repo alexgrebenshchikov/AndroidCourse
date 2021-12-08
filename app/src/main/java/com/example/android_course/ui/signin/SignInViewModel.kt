@@ -31,6 +31,7 @@ class SignInViewModel @Inject constructor(
             try {
                 when (val response = authInteractor.signInWithEmail(email, password)) {
                     is NetworkResponse.Success<*> -> {
+                        Timber.d("success")
                         _signInActionStateFlow.emit(SignInActionState.Pending)
                     }
                     is NetworkResponse.ServerError<*> -> {

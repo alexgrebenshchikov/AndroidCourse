@@ -17,7 +17,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "Boolean", "USE_MOCK_BACKEND_API", 'false'
+        buildConfigField "Boolean", "USE_MOCK_BACKEND_API", 'true'
         // TODO: Прописать адрес нашего сервера.
         buildConfigField "String", "BACKEND_API_URL", '""'
     }
@@ -68,6 +68,12 @@ android {
             // because this product flavor is the most sensitive to errors.
             buildConfigField "Boolean", "USE_MOCK_BACKEND_API", 'false'
             buildConfigField "String", "BACKEND_API_URL", '""'
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "grebenshchikov-alexander-${variant.versionName}.apk"
         }
     }
 }
@@ -140,7 +146,6 @@ dependencies {
     // Testing Navigation
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
-
     // Jetpack Compose Integration
     implementation "androidx.navigation:navigation-compose:2.4.0-beta01"
 
@@ -160,6 +165,8 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$hiltVersion"
     implementation "androidx.hilt:hilt-navigation-fragment:1.0.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation "dev.chrisbanes.insetter:insetter:0.6.1"
 }
 
 

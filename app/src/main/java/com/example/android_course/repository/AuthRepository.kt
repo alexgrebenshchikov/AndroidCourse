@@ -1,7 +1,7 @@
 package com.example.android_course.repository
 
-import com.blelocking.di.AppCoroutineScope
-import com.blelocking.di.IoCoroutineDispatcher
+import com.example.android_course.di.AppCoroutineScope
+import com.example.android_course.di.IoCoroutineDispatcher
 import com.example.android_course.data.network.Api
 import com.example.android_course.data.network.request.CreateProfileRequest
 import com.example.android_course.data.network.request.RefreshAuthTokensRequest
@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 import dagger.Lazy
+import javax.inject.Singleton
 
 /*object AuthRepository {
     private val _isAuthorizedFlow = MutableStateFlow(false)
@@ -46,6 +47,7 @@ import dagger.Lazy
     }
 }*/
 
+@Singleton
 class AuthRepository @Inject constructor(
     private val apiLazy: Lazy<Api>,
     private val localKeyValueStorage: LocalKeyValueStorage,

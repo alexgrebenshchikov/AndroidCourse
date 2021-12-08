@@ -1,6 +1,6 @@
 package com.example.android_course.di.module
 
-import com.blelocking.di.*
+import com.example.android_course.di.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
