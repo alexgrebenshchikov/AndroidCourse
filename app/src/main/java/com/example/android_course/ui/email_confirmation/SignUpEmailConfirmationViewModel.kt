@@ -6,7 +6,6 @@ import com.example.android_course.data.network.response.error.SendRegistrationVe
 import com.example.android_course.data.network.response.error.VerifyRegistrationCodeErrorResponse
 import com.example.android_course.interactor.AuthInteractor
 import com.example.android_course.ui.base.BaseViewModel
-import com.example.android_course.ui.signup.SignUpViewModel
 import com.haroldadmin.cnradapter.NetworkResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -82,6 +81,7 @@ class SignUpEmailConfirmationViewModel @Inject constructor(
         Timber.d("$firstname $lastname $nickname $email $password")
         viewModelScope.launch {
             _signUpActionStateFlow.emit(SignUpActionState.Loading)
+            Timber.d("signup!")
             try {
                 when (val response = authInteractor.signUpWithEmailAnfPersonalInfo(
                     firstname,
