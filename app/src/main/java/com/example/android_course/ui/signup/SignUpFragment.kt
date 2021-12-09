@@ -136,10 +136,12 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
                                 vs.e.body?.nonFieldErrors == null
                             ) {
                                 sharedViewModel.resetSignUpActionStateFlow()
+                                sharedViewModel.countDownTimer?.cancel()
+                                sharedViewModel.countDownTimer = null
+                                sharedViewModel.sendCodeIsAllowed = true
                                 try {
                                     findNavController().navigate(R.id.action_signUpFragment_to_emailConfirmationFragment)
                                 } catch (_ : Throwable) {}
-                                Timber.d("navigation!")
                             } else {
 
                                 viewBinding.underEmailTextView.text = if (vs.e.body?.email != null)

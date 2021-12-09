@@ -14,6 +14,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import android.os.CountDownTimer
+
+
+
 
 @HiltViewModel
 class SignUpEmailConfirmationViewModel @Inject constructor(
@@ -39,6 +43,15 @@ class SignUpEmailConfirmationViewModel @Inject constructor(
     private val _sendVerificationCodeStateFlow = MutableStateFlow<SendVerificationCodeActionState>(
         SendVerificationCodeActionState.Pending
     )
+
+    private val sendCodeDelay = 30
+    private val _sendCodeTimerFlow = MutableStateFlow(sendCodeDelay)
+    var countDownTimer: CountDownTimer? = null
+    var sendCodeIsAllowed : Boolean = true
+
+    fun sendCodeTimerStateFlow() : Flow<Int> {
+        return _sendCodeTimerFlow.asStateFlow()
+    }
 
     fun sendVerificationCodeStateFlow(): Flow<SendVerificationCodeActionState> {
         return _sendVerificationCodeStateFlow.asStateFlow()
@@ -162,6 +175,7 @@ class SignUpEmailConfirmationViewModel @Inject constructor(
     fun sendCode(
         email: String,
     ) {
+        Timber.d("sending code...")
         viewModelScope.launch {
             _sendVerificationCodeStateFlow.emit(SendVerificationCodeActionState.Loading)
             try {
@@ -195,6 +209,24 @@ class SignUpEmailConfirmationViewModel @Inject constructor(
         }
     }
 
+
+    fun startSendCodeTimer() {
+        countDownTimer = object : CountDownTimer(30000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                viewModelScope.launch {
+                    _sendCodeTimerFlow.emit((millisUntilFinished / 1000).toInt())
+                    //timeSec--
+                }
+                //Timber.d("timer down")
+            }
+
+            override fun onFinish() {
+                viewModelScope.launch {
+                    _sendCodeTimerFlow.emit(0)
+                }
+            }
+        }.apply { start() }
+    }
     sealed class SignUpActionState {
         object Pending : SignUpActionState()
         object Loading : SignUpActionState()

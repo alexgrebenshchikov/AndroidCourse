@@ -19,6 +19,15 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.Error
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+
+import android.view.animation.LinearInterpolator
+
+import android.view.animation.RotateAnimation
+
+
+
 
 @AndroidEntryPoint
 class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
@@ -38,6 +47,17 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
         }
         subscribeToFormFields()
         subscribeToAuthStatus()
+
+        val anim = RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF,
+            0.5f, Animation.RELATIVE_TO_SELF,
+            0.5f)
+
+        anim.interpolator = LinearInterpolator()
+        anim.repeatCount = Animation.INFINITE
+        anim.duration = 2000
+
+        val splash = viewBinding.mknLogoImageView
+        splash.startAnimation(anim)
     }
 
     private fun subscribeToAuthStatus() {

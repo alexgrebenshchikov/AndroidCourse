@@ -24,4 +24,7 @@
     <string name="common_general_error_text">Something went wrong!</string>
     <string name="submit_code">Submit code</string>
     <string name="underPasswordText">Password</string>
+    <string name="send_code_again">Send code again</string>
+    <string name="send_code_again_in">Send code again in: %d</string>
+    <string name="timer_up">Tap on button above to send code again.</string>
 </resources>
