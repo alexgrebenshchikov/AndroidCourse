@@ -27,4 +27,5 @@
     <string name="send_code_again">Send code again</string>
     <string name="send_code_again_in">Send code again in: %d</string>
     <string name="timer_up">Tap on button above to send code again.</string>
+    <string name="common_counter_prefix">+ %d</string>
 </resources>
