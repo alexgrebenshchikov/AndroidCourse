@@ -5,6 +5,8 @@ import android.os.Handler
 import android.view.View
 import android.widget.Adapter
 import android.widget.ImageButton
+import androidx.core.view.marginStart
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -23,14 +25,15 @@ import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 import kotlin.properties.Delegates
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.example.android_course.ui.signin.SignInViewModel
 import timber.log.Timber
 
 
 class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding) {
     private val viewBinding by viewBinding(FragmentOnboardingBinding::bind)
+    private val viewModel: OnBoardingViewModel by viewModels()
+
     private var player: ExoPlayer? = null
-    private var soundEnabled: Boolean = true
-    private var currentVolume: Float? = null
     private var page = 0
     private var numPages  = 0
     private val handler: Handler by lazy { Handler() }
@@ -38,6 +41,9 @@ class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding) {
         getVIewPagerSwitchRoutine()
     }
     private val delay: Long = 4000
+
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,6 +54,8 @@ class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding) {
             prepare()
         }
         viewBinding.playerView.player = player
+
+
         viewBinding.viewPager.setTextPages()
         viewBinding.viewPager.attachDots(viewBinding.onboardingTextTabLayout)
         viewBinding.viewPager.registerOnPageChangeCallback(
@@ -60,6 +68,10 @@ class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding) {
                 }
             }
         )
+        //viewBinding.viewPager.clipToPadding = false;
+        //viewBinding.viewPager.setPadding(8, 0, 0, 8)
+
+
 
         viewBinding.signUpButton.setOnClickListener {
             it.findNavController().navigate(R.id.action_onBoardingFragment_to_signUpFragment)
@@ -67,24 +79,26 @@ class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding) {
         viewBinding.signInButton.setOnClickListener {
             it.findNavController().navigate(R.id.action_onBoardingFragment_to_signInFragment)
         }
+
+
+        if(!viewModel.soundEnabled)
+            soundOff(viewBinding.soundButton, player)
+
         viewBinding.soundButton.setOnClickListener {
-            if (soundEnabled) {
-                currentVolume = player?.volume
-                player?.volume = 0f
-                soundEnabled = false
-                viewBinding.soundButton.setBackgroundResource(R.drawable.ic_volume_off_white_24dp)
+            if (viewModel.soundEnabled) {
+                soundOff(viewBinding.soundButton, player)
             } else {
-                player?.volume = currentVolume!!
-                soundEnabled = true
-                viewBinding.soundButton.setBackgroundResource(R.drawable.ic_volume_up_white_24dp)
+                soundOn(viewBinding.soundButton, player)
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        viewModel.position?.let {
+            player?.seekTo(it)
+        }
         player?.play()
-        viewBinding.viewPager.setCurrentItem(0, false)
         handler.postDelayed(viewPagerSwitchRoutine, delay)
 
     }
@@ -92,6 +106,7 @@ class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding) {
     override fun onPause() {
         super.onPause()
         player?.pause()
+        viewModel.position = player?.currentPosition
         handler.removeCallbacks(viewPagerSwitchRoutine)
 
     }
@@ -101,6 +116,21 @@ class OnBoardingFragment : BaseFragment(R.layout.fragment_onboarding) {
         player?.release()
         handler.removeCallbacks(viewPagerSwitchRoutine)
     }
+
+    private fun soundOff(soundButton: ImageButton, player: ExoPlayer?) {
+        viewModel.currentVolume = player?.volume
+        player?.volume = 0f
+        viewModel.soundEnabled = false
+        soundButton.setBackgroundResource(R.drawable.ic_volume_off_white_24dp)
+    }
+
+
+    private fun soundOn(soundButton: ImageButton, player: ExoPlayer?) {
+        player?.volume = viewModel.currentVolume!!
+        viewModel.soundEnabled = true
+        soundButton.setBackgroundResource(R.drawable.ic_volume_up_white_24dp)
+    }
+
 
     private fun ViewPager2.setTextPages() {
         adapter =

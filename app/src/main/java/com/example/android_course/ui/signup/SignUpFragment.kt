@@ -10,25 +10,18 @@ import android.text.TextPaint
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
-import androidx.core.text.buildSpannedString
-import androidx.core.text.inSpans
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.android_course.R
 import com.example.android_course.ui.base.BaseFragment
 import com.example.android_course.databinding.FragmentSignUpBinding
-import com.example.android_course.util.getSpannedString
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
@@ -36,37 +29,55 @@ import android.text.Spanned
 
 import android.text.SpannableString
 
-import android.R.string.no
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import com.example.android_course.ui.email_confirmation.SignUpEmailConfirmationViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Error
 
 
-
-
-
+@AndroidEntryPoint
 class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
     private val viewBinding by viewBinding(FragmentSignUpBinding::bind)
-    private val viewModel: SignUpViewModel by viewModels()
+
+    private val sharedViewModel: SignUpEmailConfirmationViewModel by activityViewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding.signUpButton.setOnClickListener {
-            viewModel.signUp(
+            sharedViewModel.signUp(
                 firstname = viewBinding.firstnameEditText.text?.toString() ?: "",
                 lastname = viewBinding.lastnameEditText.text?.toString() ?: "",
                 nickname = viewBinding.nicknameEditText.text?.toString() ?: "",
                 email = viewBinding.emailEditText.text?.toString() ?: "",
-                password = viewBinding.passwordEditText.text?.toString() ?: ""
+                password = viewBinding.passwordEditText.text?.toString() ?: "",
+                ""
             )
-            //it.findNavController().navigate(R.id.action_signUpFragment_to_emailConfirmationFragment)
+
+            sharedViewModel.email = viewBinding.emailEditText.text?.toString() ?: ""
+            sharedViewModel.password = viewBinding.passwordEditText.text?.toString() ?: ""
+            sharedViewModel.firstname = viewBinding.firstnameEditText.text?.toString() ?: ""
+            sharedViewModel.lastname = viewBinding.lastnameEditText.text?.toString() ?: ""
+            sharedViewModel.nickname = viewBinding.nicknameEditText.text?.toString() ?: ""
+            //findNavController().navigate(R.id.action_signUpFragment_to_emailConfirmationFragment)
+
         }
         viewBinding.termsAndConditionsCheckBox.setClubRulesText {
             Timber.d("checkbox")
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://policies.google.com/terms")))
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://policies.google.com/terms")
+                )
+            )
         }
+        viewBinding.backButton.setOnClickListener { onBackButtonPressed() }
 
 
         subscribeToFormFields()
-        subscribeToEvents()
+
+        subscribeToSignUpStatus()
     }
 
 
@@ -111,16 +122,75 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
     }
 
 
-    private fun subscribeToEvents() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.eventsFlow().collect { event ->
-                    when (event) {
-                        is SignUpViewModel.Event.SignUpEmailConfirmationRequired -> {
-                            findNavController().navigate(R.id.action_signUpFragment_to_emailConfirmationFragment)
+    private fun subscribeToSignUpStatus() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.signUpActionStateFlow().collect { vs ->
+                    when (vs) {
+
+                        is SignUpEmailConfirmationViewModel.SignUpActionState.ServerError -> {
+                            if (vs.e.body?.email == null &&
+                                vs.e.body?.password == null &&
+                                vs.e.body?.firstName == null &&
+                                vs.e.body?.lastName == null &&
+                                vs.e.body?.nonFieldErrors == null
+                            ) {
+                                sharedViewModel.resetSignUpActionStateFlow()
+                                sharedViewModel.countDownTimer?.cancel()
+                                sharedViewModel.countDownTimer = null
+                                sharedViewModel.sendCodeIsAllowed = true
+                                try {
+                                    findNavController().navigate(R.id.action_signUpFragment_to_emailConfirmationFragment)
+                                } catch (_ : Throwable) {}
+                            } else {
+
+                                viewBinding.underEmailTextView.text = if (vs.e.body?.email != null)
+                                    vs.e.body?.email!!.joinToString(separator = ", ") { e: Error ->
+                                        e.message ?: ""
+                                    } else ""
+
+                                viewBinding.underPasswordTextView.text = if (vs.e.body?.password != null)
+                                    vs.e.body?.password!!.joinToString(separator = ", ") { e: Error ->
+                                        e.message ?: ""
+                                    } else ""
+
+                                viewBinding.underFirstNameTextView.text = if (vs.e.body?.firstName != null)
+                                    vs.e.body?.firstName!!.joinToString(separator = ", ") { e: Error ->
+                                        e.message ?: ""
+                                    } else ""
+
+                                viewBinding.underLastNameTextView.text = if (vs.e.body?.lastName != null)
+                                    vs.e.body?.lastName!!.joinToString(separator = ", ") { e: Error ->
+                                        e.message ?: ""
+                                    } else ""
+
+                                vs.e.body?.nonFieldErrors?.let {
+                                    Toast
+                                        .makeText(
+                                            requireContext(),
+                                            it.joinToString(separator = ", ") { e: Error ->
+                                                e.message ?: "" },
+                                            Toast.LENGTH_LONG
+                                        )
+                                        .show()
+                                }
+
+                            }
                         }
-                        else -> {
-                            // Do nothing.
+                        is SignUpEmailConfirmationViewModel.SignUpActionState.NetworkError -> Timber.d(
+                            vs.e.toString()
+                        )
+                        is SignUpEmailConfirmationViewModel.SignUpActionState.UnknownError -> {
+                            Toast
+                                .makeText(
+                                    requireContext(),
+                                    R.string.common_general_error_text,
+                                    Toast.LENGTH_LONG
+                                )
+                                .show()
+                        }
+                        is SignUpEmailConfirmationViewModel.SignUpActionState.Loading -> Timber.d("Loading")
+                        is SignUpEmailConfirmationViewModel.SignUpActionState.Pending -> {
                         }
                     }
                 }
@@ -193,10 +263,10 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
 
         // Turn on ClickableSpan.
         movementMethod = LinkMovementMethod.getInstance()
-        Timber.d("set rules")
         val clubRulesClickSpan =
             object : ClickableSpan() {
                 override fun onClick(widget: View) = clubRulesClickListener()
+
                 @RequiresApi(Build.VERSION_CODES.M)
                 override fun updateDrawState(ds: TextPaint) {
                     super.updateDrawState(ds)

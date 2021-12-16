@@ -18,6 +18,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Error
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+
+import android.view.animation.LinearInterpolator
+
+import android.view.animation.RotateAnimation
+
+
+
 
 @AndroidEntryPoint
 class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
@@ -37,6 +47,17 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
         }
         subscribeToFormFields()
         subscribeToAuthStatus()
+
+        val anim = RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF,
+            0.5f, Animation.RELATIVE_TO_SELF,
+            0.5f)
+
+        anim.interpolator = LinearInterpolator()
+        anim.repeatCount = Animation.INFINITE
+        anim.duration = 2000
+
+        val splash = viewBinding.mknLogoImageView
+        splash.startAnimation(anim)
     }
 
     private fun subscribeToAuthStatus() {
@@ -45,7 +66,28 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
                 viewModel.signInActionStateFlow().collect { vs ->
                     when (vs) {
                         is SignInViewModel.SignInActionState.Pending -> Timber.d("success")
-                        is SignInViewModel.SignInActionState.ServerError -> Timber.d(vs.e.code.toString())
+                        is SignInViewModel.SignInActionState.ServerError -> {
+                            viewBinding.underEmailTextView.text = if (vs.e.body?.email != null)
+                                vs.e.body?.email!!.joinToString(separator = ", ") { e: Error ->
+                                    e.message ?: ""
+                                } else ""
+
+                            viewBinding.underPasswordTextView.text = if (vs.e.body?.password != null)
+                                vs.e.body?.password!!.joinToString(separator = ", ") { e: Error ->
+                                    e.message ?: ""
+                                } else ""
+
+                            vs.e.body?.nonFieldErrors?.let {
+                                Toast
+                                    .makeText(
+                                        requireContext(),
+                                        it.joinToString(separator = ", ") { e: Error ->
+                                            e.message ?: "" },
+                                        Toast.LENGTH_LONG
+                                    )
+                                    .show()
+                            }
+                        }
                         is SignInViewModel.SignInActionState.NetworkError -> Timber.d(vs.e.toString())
                         is SignInViewModel.SignInActionState.UnknownError -> {
                             Toast

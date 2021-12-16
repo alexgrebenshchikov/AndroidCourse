@@ -7,6 +7,7 @@ import com.example.android_course.data.network.response.VerificationTokenRespons
 import com.example.android_course.data.network.response.error.*
 import com.example.android_course.entity.AuthTokens
 import com.haroldadmin.cnradapter.NetworkResponse
+import java.lang.Error
 
 class MockApi : Api {
 
@@ -24,6 +25,14 @@ class MockApi : Api {
             ),
             code = 200
         )
+        /*return NetworkResponse.ServerError(
+            SignInWithEmailErrorResponse(
+                email = listOf(Error("Invalid email!")),
+                password = listOf(Error("Invalid password")),
+                nonFieldErrors = listOf(Error("jojo"))
+            ),
+            code = 400
+        )*/
     }
 
     override suspend fun refreshAuthTokens(request: RefreshAuthTokensRequest): NetworkResponse<AuthTokens, RefreshAuthTokensErrorResponse> {
@@ -31,7 +40,10 @@ class MockApi : Api {
     }
 
     override suspend fun sendRegistrationVerificationCode(email: String): NetworkResponse<Unit, SendRegistrationVerificationCodeErrorResponse> {
-        TODO("Not yet implemented")
+        return NetworkResponse.Success(
+            Unit,
+            code = 200
+        )
     }
 
     override suspend fun verifyRegistrationCode(
@@ -39,13 +51,53 @@ class MockApi : Api {
         email: String?,
         phoneNumber: String?
     ): NetworkResponse<VerificationTokenResponse, VerifyRegistrationCodeErrorResponse> {
-        TODO("Not yet implemented")
+        return when (code) {
+            "420993" -> NetworkResponse.Success(
+                VerificationTokenResponse(
+                    verificationToken = "hfsdsjkhfkdsjhfkjdshfkjsdks"
+                ),
+                code = 200
+            )
+            else -> NetworkResponse.ServerError(
+                VerifyRegistrationCodeErrorResponse(
+                    nonFieldErrors = listOf(Error("Wrong verification code!"))
+                ),
+                code = 400
+            )
+        }
     }
 
 
-
     override suspend fun createProfile(request: CreateProfileRequest): NetworkResponse<AuthTokens, CreateProfileErrorResponse> {
-        TODO("Not yet implemented")
+        return when (request.verificationToken) {
+            "420993" -> NetworkResponse.Success(
+                AuthTokens(
+                    accessToken = "fyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dnZWRJbkFzIjoiYWRtaW4iLCJpYXQiOjE0MjI3Nzk2MzgsImV4cCI6MTY0MDg3MTc3MX0.gzSraSYS8EXBxLN_oWnFSRgCzcmJmMjLiuyu5CSpyHI",
+                    refreshToken = "fyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dnZWRJbkFzIjoiYWRtaW4iLCJpYXQiOjE0MjI3Nzk2MzgsImV4cCI6MTY0MDg3MTc3MX0.gzSraSYS8EXBxLN_oWnFSRgCzcmJmMjLiuyu5CSpyHI",
+                    accessTokenExpiration = 1640871771000,
+                    refreshTokenExpiration = 1640871771000,
+                ),
+                code = 200
+            )
+
+            else -> NetworkResponse.ServerError(
+                CreateProfileErrorResponse(
+                    null,
+                    /*listOf(Error("Wrong verification token!")),
+                    listOf(Error("Invalid first name!")),
+                    listOf(Error("Invalid last name!")),
+                    listOf(Error("Invalid email!"), Error("waka waka")),
+                    listOf(Error("Invalid password"))*/
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ),
+                code = 400
+            )
+        }
+
     }
 
 

@@ -6,9 +6,8 @@ import com.example.android_course.data.network.Api
 import com.example.android_course.data.network.request.CreateProfileRequest
 import com.example.android_course.data.network.request.RefreshAuthTokensRequest
 import com.example.android_course.data.network.request.SignInWithEmailRequest
-import com.example.android_course.data.network.response.error.CreateProfileErrorResponse
-import com.example.android_course.data.network.response.error.RefreshAuthTokensErrorResponse
-import com.example.android_course.data.network.response.error.SignInWithEmailErrorResponse
+import com.example.android_course.data.network.response.VerificationTokenResponse
+import com.example.android_course.data.network.response.error.*
 import com.example.android_course.data.persistent.LocalKeyValueStorage
 import com.example.android_course.entity.AuthTokens
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -117,6 +116,18 @@ class AuthRepository @Inject constructor(
                 password
             )
         )
+    }
+
+    suspend fun sendVerificationCode(email: String):
+            NetworkResponse<Unit, SendRegistrationVerificationCodeErrorResponse> {
+        return api.sendRegistrationVerificationCode(email)
+    }
+
+    suspend fun verifyRegistrationCode(code: String,
+                                       email: String?,
+                                       phoneNumber: String?):
+            NetworkResponse<VerificationTokenResponse, VerifyRegistrationCodeErrorResponse> {
+        return api.verifyRegistrationCode(code, email, phoneNumber)
     }
 
     suspend fun generateRefreshedAuthTokens(refreshToken: String): NetworkResponse<AuthTokens, RefreshAuthTokensErrorResponse> {
