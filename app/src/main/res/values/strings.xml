@@ -28,4 +28,8 @@
     <string name="send_code_again_in">Send code again in: %d</string>
     <string name="timer_up">Tap on button above to send code again.</string>
     <string name="common_counter_prefix">+ %d</string>
+    <string name="profile_first_name_label">First name:</string>
+    <string name="profile_las_name_label">Last name:</string>
+    <string name="profile_nick_name_label">Nick name:</string>
+    <string name="profile_email_label">Email:</string>
 </resources>

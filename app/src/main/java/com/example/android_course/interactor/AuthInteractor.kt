@@ -51,6 +51,7 @@ class AuthInteractor @Inject constructor(
         when (response) {
             is NetworkResponse.Success -> {
                 authRepository.saveAuthTokens(response.body)
+                //authRepository.saveUserInfo(UserInfo(firstname, lastname, nickname, email, password))
             }
             is NetworkResponse.Error -> {
                 Timber.e(response.error)
