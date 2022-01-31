@@ -18,33 +18,6 @@ import javax.inject.Inject
 import dagger.Lazy
 import javax.inject.Singleton
 
-/*object AuthRepository {
-    private val _isAuthorizedFlow = MutableStateFlow(false)
-    val isAuthorizedFlow = _isAuthorizedFlow.asStateFlow()
-    private var _email : String = ""
-    private var _password : String = ""
-
-    suspend fun signIn(email : String, password: String) {
-        _email = email
-        _password = password
-        _isAuthorizedFlow.emit(true)
-    }
-
-    suspend fun logout() {
-        _isAuthorizedFlow.emit(false)
-
-    }
-
-    suspend fun signUp(
-        firstname: String,
-        lastname: String,
-        nickname: String,
-        email: String,
-        password: String
-    ) {
-        //TODO: Get API response for email availability, change screen to email confirm
-    }
-}*/
 
 @Singleton
 class AuthRepository @Inject constructor(
@@ -78,6 +51,8 @@ class AuthRepository @Inject constructor(
         Timber.d("Emit auth tokens $authTokens.")
         authTokensFlow.await().emit(authTokens)
     }
+
+
 
     /**
      * @return whether active access tokens are authorized or not

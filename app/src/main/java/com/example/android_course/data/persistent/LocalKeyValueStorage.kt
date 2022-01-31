@@ -22,6 +22,8 @@ class LocalKeyValueStorage(
                 moshi.adapter(AuthTokens::class.java)
             )
 
+
+
     private class JsonDelegate<T>(
         private val key: String,
         private val pref: SharedPreferences,
@@ -47,7 +49,6 @@ class LocalKeyValueStorage(
     }
 
     companion object {
-
         private const val AUTH_TOKENS = "auth_tokens"
     }
 }
