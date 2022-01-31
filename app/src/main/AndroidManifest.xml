@@ -11,6 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Android_course"
         >
+
+
         <activity android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -19,6 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
     </application>
 
 </manifest>

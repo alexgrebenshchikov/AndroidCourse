@@ -19,12 +19,17 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //holder.avatarImageView.setImageBitmap(userList[position].avatar)
+        if(userList[position].picture != null) {
         Glide.with(holder.avatarImageView)
-            .load(userList[position].avatar)
+            .load(userList[position].picture)
             .circleCrop()
-            .into(holder.avatarImageView)
-        holder.firstRowView.setText(userList[position].userName)
-        holder.secondRowView.setText(userList[position].groupName)
+            .into(holder.avatarImageView) }
+        else {
+            holder.avatarImageView.setImageResource(R.drawable.ic_mkn_logo_2_foreground)
+            //holder.avatarImageView.setBackgroundResource(R.drawable.ic_mkn_logo_2_background)
+        }
+        holder.firstRowView.setText("${userList[position].firstName} ${userList[position].lastName}")
+        holder.secondRowView.setText(userList[position].aboutMe)
     }
 
     override fun getItemCount(): Int {

@@ -10,6 +10,7 @@ import com.example.android_course.data.network.response.VerificationTokenRespons
 import com.example.android_course.data.network.response.error.*
 import com.example.android_course.data.persistent.LocalKeyValueStorage
 import com.example.android_course.entity.AuthTokens
+import com.example.android_course.entity.UserInfo
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -76,15 +77,15 @@ class AuthRepository @Inject constructor(
      * @return access tokens with higher permissions for the new registered user
      */
     suspend fun generateAuthTokensByEmailAndPersonalInfo(
-        email: String,
-        verificationToken: String,
+        userName: String,
         firstName: String,
         lastName: String,
+        email: String,
         password: String
-    ): NetworkResponse<AuthTokens, CreateProfileErrorResponse> {
+    ): NetworkResponse<UserInfo, CreateProfileErrorResponse> {
         return api.createProfile(
             CreateProfileRequest(
-                verificationToken,
+                userName,
                 firstName,
                 lastName,
                 email,

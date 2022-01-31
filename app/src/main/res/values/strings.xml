@@ -32,4 +32,14 @@
     <string name="profile_las_name_label">Last name:</string>
     <string name="profile_nick_name_label">Nick name:</string>
     <string name="profile_email_label">Email:</string>
+    <string name="Authorization_error">Authorization failed. Please sign in again</string>
+    <string name="authorization_failed">Authorization failed</string>
+    <string name="submit">submit</string>
+    <string name="create_new_post">Create new post</string>
+    <string name="enter_title">enter title</string>
+    <string name="enter_post_text">enter post text</string>
+    <string name="create_post">create post</string>
+    <string name="enter_link">enter link</string>
+    <string name="enter_image_link">enter image link</string>
+    <string name="choose_image">Choose image</string>
 </resources>

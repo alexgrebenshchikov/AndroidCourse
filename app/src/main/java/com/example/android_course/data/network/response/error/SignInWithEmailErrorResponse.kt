@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class SignInWithEmailErrorResponse(
-    @Json(name = "non_field_errors") val nonFieldErrors: List<Error>?,
-    @Json(name = "email") val email: List<Error>?,
-    @Json(name = "password") val password: List<Error>?
+    @Json(name = "non_field_errors") val nonFieldErrors: List<MyError>?,
+    @Json(name = "email") val email: List<MyError>?,
+    @Json(name = "password") val password: List<MyError>?
 )

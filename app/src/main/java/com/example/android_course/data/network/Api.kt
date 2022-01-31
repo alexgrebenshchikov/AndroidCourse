@@ -1,11 +1,15 @@
 package com.example.android_course.data.network
 
+import com.example.android_course.data.network.request.CreatePostRequest
 import com.example.android_course.data.network.request.CreateProfileRequest
 import com.example.android_course.data.network.request.RefreshAuthTokensRequest
 import com.example.android_course.data.network.request.SignInWithEmailRequest
+import com.example.android_course.data.network.response.PostResponse
 import com.example.android_course.data.network.response.VerificationTokenResponse
 import com.example.android_course.data.network.response.error.*
 import com.example.android_course.entity.AuthTokens
+import com.example.android_course.entity.Post
+import com.example.android_course.entity.UserInfo
 import com.example.android_course.util.User
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.squareup.moshi.Json
@@ -25,9 +29,12 @@ data class getUsersResponse(
 interface Api {
 
     @GET("users?per_page=10")
-    suspend fun getUsers(): GetUsersResponse
+    suspend fun getUsers(): NetworkResponse<List<User>, VerificationErrorResponse>
 
-    @POST("auth/sign-in-email")
+    @GET("users/get-profile")
+    suspend fun getProfile(): UserInfo
+
+    @POST("/auth/sign-in-with-email")
     suspend fun signInWithEmail(
         @Body request: SignInWithEmailRequest
     ): NetworkResponse<AuthTokens, SignInWithEmailErrorResponse>
@@ -49,10 +56,27 @@ interface Api {
         @Query("phone_number") phoneNumber: String?
     ): NetworkResponse<VerificationTokenResponse, VerifyRegistrationCodeErrorResponse>
 
-    @PUT("registration/create-profile")
+    @POST("registration/create-profile")
     suspend fun createProfile(
         @Body request: CreateProfileRequest
-    ): NetworkResponse<AuthTokens, CreateProfileErrorResponse>
+    ): NetworkResponse<UserInfo, CreateProfileErrorResponse>
+
+
+    @GET("posts")
+    suspend fun loadPosts(
+        @Query("from") date: String,
+        @Query("pageSize") size: String
+    ): PostResponse
+
+    @POST("posts")
+    suspend fun createPost(
+        @Body request: CreatePostRequest
+    ) : Post
+
+    /*@POST("/registration/create-profile")
+    suspend fun createProfileAlt(
+        @Body request: CreateProfileAltRequest
+    ) : NetworkResponse<UserInfo, CreateProfileAltErrorResponse>*/
 }
 
 @JsonClass(generateAdapter = true)

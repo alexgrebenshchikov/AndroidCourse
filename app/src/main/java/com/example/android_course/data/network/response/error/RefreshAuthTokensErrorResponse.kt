@@ -5,6 +5,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class RefreshAuthTokensErrorResponse(
-    @Json(name = "non_field_errors") val nonFieldErrors: List<Error>?,
-    @Json(name = "refresh") val refresh: List<Error>?
+    @Json(name = "refresh") val refresh: List<MyError>?
 )

@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_signUpFragment_to_emailConfirmationFragment"
             app:destination="@id/emailConfirmationFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
     </fragment>
     <fragment
         android:id="@+id/emailConfirmationFragment"

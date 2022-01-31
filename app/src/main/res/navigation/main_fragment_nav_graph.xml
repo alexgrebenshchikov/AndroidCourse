@@ -7,7 +7,11 @@
     <fragment
         android:id="@+id/newsFragment"
         android:name="com.example.android_course.ui.news.NewsFragment"
-        android:label="NewsFragment" />
+        android:label="NewsFragment" >
+        <action
+            android:id="@+id/action_newsFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userListFragment"
         android:name="com.example.android_course.ui.userlist.UserListFragment"
@@ -24,4 +28,8 @@
         android:id="@+id/personFragment"
         android:name="com.example.android_course.ui.profile.ProfileFragment"
         android:label="PersonFragment" />
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.example.android_course.ui.news.CreatePostFragment"
+        android:label="CreatePostFragment" />
 </navigation>

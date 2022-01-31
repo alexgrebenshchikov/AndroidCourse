@@ -25,8 +25,8 @@ import android.view.animation.AnimationSet
 import android.view.animation.LinearInterpolator
 
 import android.view.animation.RotateAnimation
-
-
+import androidx.core.view.isVisible
+import com.example.android_course.data.network.response.error.MyError
 
 
 @AndroidEntryPoint
@@ -58,6 +58,10 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
 
         val splash = viewBinding.mknLogoImageView
         splash.startAnimation(anim)
+
+        viewBinding.emailEditText.setText(arguments?.getString("email"))
+        viewBinding.passwordEditText.setText(arguments?.getString("password"))
+        viewBinding.progressBar.isVisible = false
     }
 
     private fun subscribeToAuthStatus() {
@@ -67,29 +71,41 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
                     when (vs) {
                         is SignInViewModel.SignInActionState.Pending -> Timber.d("success")
                         is SignInViewModel.SignInActionState.ServerError -> {
+                            viewBinding.progressBar.isVisible = false
+
                             viewBinding.underEmailTextView.text = if (vs.e.body?.email != null)
-                                vs.e.body?.email!!.joinToString(separator = ", ") { e: Error ->
-                                    e.message ?: ""
+                                vs.e.body?.email!!.joinToString(separator = ", ") { e: MyError ->
+                                    e.message
                                 } else ""
 
                             viewBinding.underPasswordTextView.text = if (vs.e.body?.password != null)
-                                vs.e.body?.password!!.joinToString(separator = ", ") { e: Error ->
-                                    e.message ?: ""
+                                vs.e.body?.password!!.joinToString(separator = ", ") { e: MyError ->
+                                    e.message
                                 } else ""
 
                             vs.e.body?.nonFieldErrors?.let {
                                 Toast
                                     .makeText(
                                         requireContext(),
-                                        it.joinToString(separator = ", ") { e: Error ->
-                                            e.message ?: "" },
+                                        it.joinToString(separator = ", ") { e: MyError ->
+                                            e.message },
                                         Toast.LENGTH_LONG
                                     )
                                     .show()
                             }
                         }
-                        is SignInViewModel.SignInActionState.NetworkError -> Timber.d(vs.e.toString())
+                        is SignInViewModel.SignInActionState.NetworkError -> {
+                            viewBinding.progressBar.isVisible = false
+                            Toast
+                                .makeText(
+                                    requireContext(),
+                                    "Network Error!",
+                                    Toast.LENGTH_LONG
+                                )
+                                .show()
+                        }
                         is SignInViewModel.SignInActionState.UnknownError -> {
+                            viewBinding.progressBar.isVisible = false
                             Toast
                                 .makeText(
                                     requireContext(),
@@ -98,7 +114,9 @@ class SignInFragment : BaseFragment(R.layout.fragment_sign_in) {
                                 )
                                 .show()
                         }
-                        is SignInViewModel.SignInActionState.Loading -> Timber.d("Loading")
+                        is SignInViewModel.SignInActionState.Loading -> {
+                            viewBinding.progressBar.isVisible = true
+                        }
                     }
                 }
             }

@@ -30,7 +30,10 @@ import android.text.Spanned
 import android.text.SpannableString
 
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import com.example.android_course.data.network.response.error.MyError
 import com.example.android_course.ui.email_confirmation.SignUpEmailConfirmationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Error
@@ -46,22 +49,22 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding.signUpButton.setOnClickListener {
-            sharedViewModel.signUp(
-                firstname = viewBinding.firstnameEditText.text?.toString() ?: "",
-                lastname = viewBinding.lastnameEditText.text?.toString() ?: "",
-                nickname = viewBinding.nicknameEditText.text?.toString() ?: "",
-                email = viewBinding.emailEditText.text?.toString() ?: "",
-                password = viewBinding.passwordEditText.text?.toString() ?: "",
-                ""
-            )
-
             sharedViewModel.email = viewBinding.emailEditText.text?.toString() ?: ""
             sharedViewModel.password = viewBinding.passwordEditText.text?.toString() ?: ""
             sharedViewModel.firstname = viewBinding.firstnameEditText.text?.toString() ?: ""
             sharedViewModel.lastname = viewBinding.lastnameEditText.text?.toString() ?: ""
             sharedViewModel.nickname = viewBinding.nicknameEditText.text?.toString() ?: ""
-            //findNavController().navigate(R.id.action_signUpFragment_to_emailConfirmationFragment)
+            sharedViewModel.signUp(
+                firstname = viewBinding.firstnameEditText.text?.toString() ?: "",
+                lastname = viewBinding.lastnameEditText.text?.toString() ?: "",
+                userName = viewBinding.nicknameEditText.text?.toString() ?: "",
+                email = viewBinding.emailEditText.text?.toString() ?: "",
+                password = viewBinding.passwordEditText.text?.toString() ?: "",
+                verificationCode = ""
+            )
 
+
+            //findNavController().navigate(R.id.action_signUpFragment_to_emailConfirmationFragment)
         }
         viewBinding.termsAndConditionsCheckBox.setClubRulesText {
             Timber.d("checkbox")
@@ -74,7 +77,7 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
         }
         viewBinding.backButton.setOnClickListener { onBackButtonPressed() }
 
-
+        viewBinding.progressBar.isVisible = false
         subscribeToFormFields()
 
         subscribeToSignUpStatus()
@@ -127,60 +130,26 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 sharedViewModel.signUpActionStateFlow().collect { vs ->
                     when (vs) {
-
                         is SignUpEmailConfirmationViewModel.SignUpActionState.ServerError -> {
-                            if (vs.e.body?.email == null &&
-                                vs.e.body?.password == null &&
-                                vs.e.body?.firstName == null &&
-                                vs.e.body?.lastName == null &&
-                                vs.e.body?.nonFieldErrors == null
-                            ) {
-                                sharedViewModel.resetSignUpActionStateFlow()
-                                sharedViewModel.countDownTimer?.cancel()
-                                sharedViewModel.countDownTimer = null
-                                sharedViewModel.sendCodeIsAllowed = true
-                                try {
-                                    findNavController().navigate(R.id.action_signUpFragment_to_emailConfirmationFragment)
-                                } catch (_ : Throwable) {}
-                            } else {
+                            viewBinding.progressBar.isVisible = false
+                            viewBinding.underEmailTextView.text = if (vs.e.body?.email != null)
+                                vs.e.body?.email!!.joinToString(separator = ", ") { e: MyError ->
+                                    e.message ?: ""
+                                } else ""
 
-                                viewBinding.underEmailTextView.text = if (vs.e.body?.email != null)
-                                    vs.e.body?.email!!.joinToString(separator = ", ") { e: Error ->
+                            viewBinding.underNickNameTextView.text =
+                                if (vs.e.body?.userName != null)
+                                    vs.e.body?.userName!!.joinToString(separator = ", ") { e: MyError ->
                                         e.message ?: ""
                                     } else ""
 
-                                viewBinding.underPasswordTextView.text = if (vs.e.body?.password != null)
-                                    vs.e.body?.password!!.joinToString(separator = ", ") { e: Error ->
-                                        e.message ?: ""
-                                    } else ""
-
-                                viewBinding.underFirstNameTextView.text = if (vs.e.body?.firstName != null)
-                                    vs.e.body?.firstName!!.joinToString(separator = ", ") { e: Error ->
-                                        e.message ?: ""
-                                    } else ""
-
-                                viewBinding.underLastNameTextView.text = if (vs.e.body?.lastName != null)
-                                    vs.e.body?.lastName!!.joinToString(separator = ", ") { e: Error ->
-                                        e.message ?: ""
-                                    } else ""
-
-                                vs.e.body?.nonFieldErrors?.let {
-                                    Toast
-                                        .makeText(
-                                            requireContext(),
-                                            it.joinToString(separator = ", ") { e: Error ->
-                                                e.message ?: "" },
-                                            Toast.LENGTH_LONG
-                                        )
-                                        .show()
-                                }
-
-                            }
                         }
-                        is SignUpEmailConfirmationViewModel.SignUpActionState.NetworkError -> Timber.d(
-                            vs.e.toString()
-                        )
+
+                        is SignUpEmailConfirmationViewModel.SignUpActionState.NetworkError -> {
+                            viewBinding.progressBar.isVisible = false
+                        }
                         is SignUpEmailConfirmationViewModel.SignUpActionState.UnknownError -> {
+                            viewBinding.progressBar.isVisible = false
                             Toast
                                 .makeText(
                                     requireContext(),
@@ -189,7 +158,26 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
                                 )
                                 .show()
                         }
-                        is SignUpEmailConfirmationViewModel.SignUpActionState.Loading -> Timber.d("Loading")
+                        is SignUpEmailConfirmationViewModel.SignUpActionState.Loading -> {
+                            viewBinding.progressBar.isVisible = true
+                        }
+                        is SignUpEmailConfirmationViewModel.SignUpActionState.Success -> {
+                            sharedViewModel.resetSignUpActionStateFlow()
+                            sharedViewModel.countDownTimer?.cancel()
+                            sharedViewModel.countDownTimer = null
+                            sharedViewModel.sendCodeIsAllowed = true
+                            try {
+                                val bundle = bundleOf(
+                                    "email" to sharedViewModel.email,
+                                    "password" to sharedViewModel.password
+                                )
+                                findNavController().navigate(
+                                    R.id.action_signUpFragment_to_signInFragment,
+                                    bundle
+                                )
+                            } catch (_: Throwable) {
+                            }
+                        }
                         is SignUpEmailConfirmationViewModel.SignUpActionState.Pending -> {
                         }
                     }

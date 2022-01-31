@@ -86,7 +86,7 @@ class SignUpEmailConfirmationViewModel @Inject constructor(
     fun signUp(
         firstname: String,
         lastname: String,
-        nickname: String,
+        userName: String,
         email: String,
         password: String,
         verificationCode : String
@@ -97,12 +97,12 @@ class SignUpEmailConfirmationViewModel @Inject constructor(
             Timber.d("signup!")
             try {
                 when (val response = authInteractor.signUpWithEmailAnfPersonalInfo(
-                    firstname,
-                    lastname, nickname, email, password, verificationCode
+                    userName, firstname,
+                    lastname, email, password, verificationCode
                 )) {
                     is NetworkResponse.Success<*> -> {
-                        Timber.d("success")
-                        _signUpActionStateFlow.emit(SignUpActionState.Pending)
+                        Timber.d(response.body.toString())
+                        _signUpActionStateFlow.emit(SignUpActionState.Success)
                     }
                     is NetworkResponse.ServerError<*> -> {
                         _signUpActionStateFlow.emit(
@@ -228,6 +228,7 @@ class SignUpEmailConfirmationViewModel @Inject constructor(
         }.apply { start() }
     }
     sealed class SignUpActionState {
+        object Success : SignUpActionState()
         object Pending : SignUpActionState()
         object Loading : SignUpActionState()
         data class ServerError(val e: NetworkResponse.ServerError<CreateProfileErrorResponse>) :

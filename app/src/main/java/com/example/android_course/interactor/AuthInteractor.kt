@@ -6,6 +6,7 @@ import com.example.android_course.data.network.response.error.SendRegistrationVe
 import com.example.android_course.data.network.response.error.SignInWithEmailErrorResponse
 import com.example.android_course.data.network.response.error.VerifyRegistrationCodeErrorResponse
 import com.example.android_course.entity.AuthTokens
+import com.example.android_course.entity.UserInfo
 import com.example.android_course.repository.AuthRepository
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +27,9 @@ class AuthInteractor @Inject constructor(
         val response = authRepository.generateAuthTokensByEmail(email, password)
         when (response) {
             is NetworkResponse.Success -> {
+                //val wrong = AuthTokens("fdfdf", response.body.refreshToken, 12, 12)
                 authRepository.saveAuthTokens(response.body)
+                //authRepository.saveAuthTokens(wrong)
             }
             is NetworkResponse.Error -> {
                 Timber.e(response.error)
@@ -36,19 +39,18 @@ class AuthInteractor @Inject constructor(
     }
 
     suspend fun signUpWithEmailAnfPersonalInfo(
+        userName: String,
         firstname: String,
         lastname: String,
-        nickname: String,
         email: String,
         password: String,
         verificationCode: String
-    ): NetworkResponse<AuthTokens, CreateProfileErrorResponse> {
+    ): NetworkResponse<UserInfo, CreateProfileErrorResponse> {
         val response = authRepository.generateAuthTokensByEmailAndPersonalInfo(
-            email,
-            verificationCode, firstname, lastname, password
+            userName, firstname, lastname, email, password
         )
 
-        when (response) {
+        /*when (response) {
             is NetworkResponse.Success -> {
                 authRepository.saveAuthTokens(response.body)
                 //authRepository.saveUserInfo(UserInfo(firstname, lastname, nickname, email, password))
@@ -56,7 +58,7 @@ class AuthInteractor @Inject constructor(
             is NetworkResponse.Error -> {
                 Timber.e(response.error)
             }
-        }
+        }*/
         return response
     }
 

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_baseline_arrow_back_ios_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/postTitleTextInputLayout"
+        style="@style/TextInputLayoutStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:hint="@string/enter_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/create_post_title"
+        android:layout_marginTop="54dp"
+        tools:layout_editor_absoluteY="104dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/postTitleEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/postTextTextInputLayout"
+        style="@style/TextInputLayoutStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="32dp"
+        android:hint="@string/enter_post_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postTitleTextInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/postTextEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/postLinkTextInputLayout"
+        style="@style/TextInputLayoutStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="32dp"
+        android:hint="@string/enter_link"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postTextTextInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/postLinkEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"  />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/postButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="48dp"
+        android:backgroundTint="@color/lazure"
+        android:text="@string/create_post"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8" />
+
+    <TextView
+        android:id="@+id/create_post_title"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/create_new_post"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/loadImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="@string/choose_image"
+        app:layout_constraintBottom_toBottomOf="@+id/postImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/postImageView" />
+
+    <ImageView
+        android:id="@+id/postImageView"
+        android:layout_width="108dp"
+        android:layout_height="108dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="74dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postLinkTextInputLayout"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

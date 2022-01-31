@@ -1,18 +1,28 @@
 package com.example.android_course.data.network
 
+import com.example.android_course.data.network.request.CreatePostRequest
 import com.example.android_course.data.network.request.CreateProfileRequest
 import com.example.android_course.data.network.request.RefreshAuthTokensRequest
 import com.example.android_course.data.network.request.SignInWithEmailRequest
+import com.example.android_course.data.network.response.PostResponse
 import com.example.android_course.data.network.response.VerificationTokenResponse
 import com.example.android_course.data.network.response.error.*
 import com.example.android_course.entity.AuthTokens
+import com.example.android_course.entity.Post
+import com.example.android_course.entity.UserInfo
+import com.example.android_course.util.User
 import com.haroldadmin.cnradapter.NetworkResponse
 import java.lang.Error
 
 class MockApi : Api {
 
-    override suspend fun getUsers(): GetUsersResponse {
-        return GetUsersResponse(emptyList())
+    override suspend fun getUsers(): NetworkResponse<List<User>, VerificationErrorResponse> {
+        return NetworkResponse.ServerError(VerificationErrorResponse(emptyList()), code = 400)
+    }
+
+    override suspend fun getProfile(): UserInfo {
+        return UserInfo("42", "pumpkineater69", "Peter", "Griffin",
+            null, null, "pg@gmail.com", null, "", "", "")
     }
 
     override suspend fun signInWithEmail(request: SignInWithEmailRequest): NetworkResponse<AuthTokens, SignInWithEmailErrorResponse> {
@@ -68,8 +78,8 @@ class MockApi : Api {
     }
 
 
-    override suspend fun createProfile(request: CreateProfileRequest): NetworkResponse<AuthTokens, CreateProfileErrorResponse> {
-        return when (request.verificationToken) {
+    override suspend fun createProfile(request: CreateProfileRequest): NetworkResponse<UserInfo, CreateProfileErrorResponse> {
+        /*return when (request.verificationToken) {
             "420993" -> NetworkResponse.Success(
                 AuthTokens(
                     accessToken = "fyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dnZWRJbkFzIjoiYWRtaW4iLCJpYXQiOjE0MjI3Nzk2MzgsImV4cCI6MTY0MDg3MTc3MX0.gzSraSYS8EXBxLN_oWnFSRgCzcmJmMjLiuyu5CSpyHI",
@@ -96,9 +106,20 @@ class MockApi : Api {
                 ),
                 code = 400
             )
-        }
+        }*/
+        return NetworkResponse.Success(
+            UserInfo("", "", "", "", "", "", "", "", "", "", ""),
+            code = 200
+        )
 
     }
 
+    override suspend fun loadPosts(date : String, size : String): PostResponse {
+        return PostResponse(emptyList(), false)
+    }
+
+    override suspend fun createPost(request: CreatePostRequest): Post {
+        return Post(1, "", "", "", "", "", "")
+    }
 
 }

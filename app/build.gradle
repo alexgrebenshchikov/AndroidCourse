@@ -17,9 +17,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "Boolean", "USE_MOCK_BACKEND_API", 'true'
+        buildConfigField "Boolean", "USE_MOCK_BACKEND_API", 'false'
         // TODO: Прописать адрес нашего сервера.
-        buildConfigField "String", "BACKEND_API_URL", '""'
+        buildConfigField "String", "BACKEND_API_URL", '"https://android-course-backend.herokuapp.com"'
     }
 
     buildTypes {
@@ -53,13 +53,13 @@ android {
             dimension "deployment-environment"
             applicationIdSuffix ".dev"
             versionNameSuffix ".dev"
-            buildConfigField "String", "BACKEND_API_URL", '""'
+            buildConfigField "String", "BACKEND_API_URL", '"https://android-course-backend.herokuapp.com"'
         }
         stage {
             dimension "deployment-environment"
             applicationIdSuffix ".stage"
             versionNameSuffix ".stage"
-            buildConfigField "String", "BACKEND_API_URL", '""'
+            buildConfigField "String", "BACKEND_API_URL", '"https://android-course-backend.herokuapp.com"'
         }
         prod {
             dimension "deployment-environment"
@@ -67,7 +67,7 @@ android {
             // Despite the default config, all the variables are specified explicitly here,
             // because this product flavor is the most sensitive to errors.
             buildConfigField "Boolean", "USE_MOCK_BACKEND_API", 'false'
-            buildConfigField "String", "BACKEND_API_URL", '""'
+            buildConfigField "String", "BACKEND_API_URL", '"https://android-course-backend.herokuapp.com"'
         }
     }
 
@@ -87,6 +87,12 @@ hilt {
 }
 
 
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 
 dependencies {
 
@@ -104,6 +110,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
     implementation "com.squareup.okhttp3:okhttp-tls:$okhttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
     // JSON parser.
     def moshiVersion = '1.12.0'
     implementation "com.squareup.moshi:moshi:$moshiVersion"
@@ -167,6 +174,26 @@ dependencies {
     implementation "androidx.hilt:hilt-navigation-fragment:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
+
+    def paging_version = "3.0.0-alpha12"
+
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation 'com.github.jrvansuita:PickImage:2.5.4'
+
+    // Current version
+    def koin_version= "3.1.5"
+    implementation "io.insert-koin:koin-android:$koin_version"
+// No more koin-android-viewmodel, koin-android-scope, koin-android-fragment
+
+// Java Compatibility
+    implementation "io.insert-koin:koin-android-compat:$koin_version"
+// Jetpack WorkManager
+    implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
+// Navigation Graph
+    implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
+// Jetpack Compose
+    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+
 }
 
 
